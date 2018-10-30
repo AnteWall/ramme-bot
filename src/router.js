@@ -13,8 +13,6 @@ router.get('/api/command', (ctx, next) => {
 })
 
 router.post('/api/command', (ctx, next) => {
-  console.log(ctx.request.body // your POST params
-  );
   const {
     user_name,
     user_id,
@@ -25,7 +23,6 @@ router.post('/api/command', (ctx, next) => {
     command,
     text
   } = ctx.request.body;
-  console.log(ctx.params);
 
   const executeCommand = getCommandFromText(text);
   if (executeCommand) {
