@@ -1,6 +1,7 @@
 import Router from 'koa-router';
 import {
-  getCommandFromText
+  getCommandFromText,
+  COMMANDS
 } from './utils/commandParser';
 const router = new Router();
 
@@ -11,6 +12,17 @@ router.get('/api/command', (ctx, next) => {
     command: "World"
   }
 })
+
+const tmpJoinFunction = (user_id) => {
+  return {
+    "attachments": [{
+      "color": "#36a64f",
+      "pretext": `<@${user_id}> has joined this weeks Ramme!`,
+      "title": "Current challengers",
+      "text": "@ante, @fredrik"
+    }]
+  }
+}
 
 router.post('/api/command', (ctx, next) => {
   const {
@@ -25,19 +37,15 @@ router.post('/api/command', (ctx, next) => {
   } = ctx.request.body;
 
   const executeCommand = getCommandFromText(text);
-  if (executeCommand) {
-    ctx.body = {
-      "text": `TODO implement code for command: ${executeCommand}`
-    }
-  } else {
-    ctx.body = {
-      "text": "Could not parse command.",
-      "attachments": [{
-        "text": "More info as an attachement"
-      }]
-    }
+  switch (executeCommand) {
+    case COMMANDS.JOIN:
+      ctx.body = tmpJoinFunction(user_id);
+      break;
+    default:
+      ctx.body = {
+        "text": `TODO implement code for command: ${executeCommand}`
+      }
   }
-
 })
 
 export default router;
