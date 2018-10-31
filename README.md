@@ -14,6 +14,10 @@ Run `yarn install`
 
 run `yarn start`
 
+#### Start a Mongodb in docker
+
+run `docker-compose up`
+
 #### Run tests
 
 run `yarn test` or `yarn test:watch` to watch test files

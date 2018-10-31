@@ -3,6 +3,9 @@ import {
   getCommandFromText,
   COMMANDS
 } from './utils/commandParser';
+import {
+  createNewUserJoin
+} from './models/joined';
 const router = new Router();
 
 router.get('/api/command', (ctx, next) => {
@@ -11,18 +14,7 @@ router.get('/api/command', (ctx, next) => {
   ctx.body = {
     command: "World"
   }
-})
-
-const tmpJoinFunction = (user_id) => {
-  return {
-    "attachments": [{
-      "color": "#36a64f",
-      "pretext": `<@${user_id}> has joined this weeks Ramme!`,
-      "title": "Current challengers",
-      "text": "@ante, @fredrik"
-    }]
-  }
-}
+});
 
 router.post('/api/command', (ctx, next) => {
   const {
@@ -33,13 +25,16 @@ router.post('/api/command', (ctx, next) => {
     team_domain,
     team_id,
     command,
-    text
+    text,
+    response_url
   } = ctx.request.body;
 
   const executeCommand = getCommandFromText(text);
   switch (executeCommand) {
     case COMMANDS.JOIN:
-      ctx.body = tmpJoinFunction(user_id);
+      ctx.body = {
+        text: createNewUserJoin(user_id, team_id, response_url)
+      }
       break;
     default:
       ctx.body = {
